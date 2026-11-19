@@ -8,7 +8,9 @@ HARBOR_PROMPT_STYLE selects the instruction set under test:
 
 Run from the workshop repository root:
 
-    adk web challenge-4-evaluation-api
+    cd ./challenge-4-evaluation-api
+    source .venv/bin/activate
+    adk web .
 """
 
 from __future__ import annotations

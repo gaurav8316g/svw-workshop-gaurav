@@ -1,7 +1,7 @@
 [project]
 name = "challenge-2-rag-and-search"
 version = "0.1.0"
-description = "Harbor Bites helpdesk using a RAG handbook and Google Search"
+description = "Harbor Bites helpdesk using a Discovery Engine handbook and Google Search"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -12,9 +12,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",
-]
-upload = [
-    "google-cloud-aiplatform>=1.70.0",
 ]
 
 [build-system]

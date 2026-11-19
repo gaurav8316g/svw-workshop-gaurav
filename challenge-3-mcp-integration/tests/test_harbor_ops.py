@@ -24,11 +24,15 @@ class HarborToolTest(unittest.TestCase):
     def test_refund_rules(self):
         self.assertIn(
             "Refund approved",
+            check_refund(12, False, True),
+        )
+        self.assertIn(
+            "window is closed",
             check_refund(12, True, True),
         )
         self.assertIn(
             "30-minute",
-            check_refund(45, True, True),
+            check_refund(45, False, True),
         )
         self.assertIn(
             "only food-quality",
@@ -37,7 +41,10 @@ class HarborToolTest(unittest.TestCase):
 
     def test_allergen_courier_and_shift_rules(self):
         self.assertIn("shellfish station", lookup_allergen_rule("Shellfish"))
-        self.assertIn("Ask a manager", lookup_allergen_rule("sesame"))
+        self.assertIn(
+            "nuts, shellfish, and gluten",
+            lookup_allergen_rule("sesame"),
+        )
         self.assertIn("Hold the bag", report_courier_noshow("HB-1042", 3))
         self.assertIn("no-show", report_courier_noshow("HB-1042", 8))
         self.assertIn(
@@ -105,7 +112,7 @@ async def _list_and_call() -> tuple[set[str], str]:
                 "check_refund",
                 {
                     "minutes_since_delivery": 12,
-                    "courier_marked_delivered": True,
+                    "courier_marked_delivered": False,
                     "food_quality_issue": True,
                 },
             )

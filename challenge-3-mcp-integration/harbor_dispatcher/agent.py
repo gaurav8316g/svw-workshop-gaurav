@@ -9,7 +9,9 @@ The root agent routes each question to one specialist:
 
 Run from the workshop repository root:
 
-    adk web challenge-3-mcp
+    cd ./challenge-3-mcp-integration
+    source .venv/bin/activate
+    adk web .
 """
 
 from __future__ import annotations

@@ -36,22 +36,19 @@ def check_refund(
 ) -> str:
     """Decide whether a Harbor Bites order qualifies for a refund.
 
-    Refunds are only for food-quality issues reported within 30 minutes.
-    After the courier marks the order delivered, that same 30-minute window
-    still applies.
+    Refunds are only for food-quality issues reported within 30 minutes
+    of handoff. Once the courier marks the order delivered, that window
+    is closed.
     """
     if not food_quality_issue:
         return "No refund. Harbor Bites refunds only food-quality issues."
-    if minutes_since_delivery > REFUND_WINDOW_MINUTES:
-        delivered = (
-            " The courier already marked the order delivered."
-            if courier_marked_delivered
-            else ""
-        )
+    if courier_marked_delivered:
         return (
-            "No refund. The 30-minute food-quality window has passed."
-            + delivered
+            "No refund. The courier marked the order delivered, so the "
+            "30-minute food-quality window is closed."
         )
+    if minutes_since_delivery > REFUND_WINDOW_MINUTES:
+        return "No refund. The 30-minute food-quality window has passed."
     return "Refund approved. Issue a full refund for the food-quality problem."
 
 
@@ -61,7 +58,9 @@ def lookup_allergen_rule(allergen: str) -> str:
     rule = ALLERGEN_RULES.get(allergen.strip().lower())
     if rule is None:
         return (
-            f"No Harbor Bites rule for {allergen}. Ask a manager before cooking."
+            "Harbor Bites tracks nuts, shellfish, and gluten. "
+            f"No rule is listed for {allergen}. Stop the ticket and ask "
+            "the guest before cooking."
         )
     return rule
 

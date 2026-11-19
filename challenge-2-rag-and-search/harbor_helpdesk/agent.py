@@ -13,7 +13,9 @@ such as us-central1.
 
 Run from the workshop repository root:
 
-    adk web challenge-2-rag-and-search
+    cd ./challenge-2-rag-and-search
+    source .venv/bin/activate
+    adk web .
 """
 
 from __future__ import annotations

@@ -1,5 +1,20 @@
-# Challenge 2: Handbook search and Google Search
+# Challenge 2 Solution: RAG + Google Search with ADK
 
+This folder contains an independent solution project for Challenge 2.
+
+## Goal
+Extend an ADK 2 agent with grounding tools:
+
+- A private handbook searched through Discovery Engine
+- Google Search for live information the handbook does not cover
+
+## Scope For This Lab
+Keep this project self-contained and runnable on its own.
+
+## Status
+Implemented with one runnable app, `harbor_helpdesk`. The handbook data store is created in the Cloud console. No script creates it.
+
+## Use Case
 Staff ask `harbor_helpdesk`. It does not answer on its own.
 
 - **handbook_specialist** searches the private handbook. Topics: refunds, allergens, courier no-shows, and shift swaps.
@@ -10,7 +25,6 @@ Both specialists are `mode="single_turn"`, so the root calls them as tools. Each
 "What is our refund window?" stays with the handbook. "Is it raining in Austin right now?" goes to Google Search. If the handbook specialist says `The handbook does not cover this.`, the root asks Google Search.
 
 ## Handbook
-
 `harbor_bites_employee_handbook.md` is the source. `harbor_bites_employee_handbook.txt` is the same text, saved as a text file so the console importer accepts it.
 
 - Refunds: 30-minute food-quality window. No refund after the courier marks the order delivered.
@@ -18,10 +32,12 @@ Both specialists are `mode="single_turn"`, so the root calls them as tools. Each
 - Couriers: wait 5 minutes, then reassign and log the no-show.
 - Shifts: a swap needs manager approval and must be requested before noon.
 
-## Data store, created in the Cloud console
+## Files You Will Use
+- `harbor_helpdesk/agent.py`
+- `harbor_bites_employee_handbook.txt`
+- `.env.example`
 
-The data store was created in the Google Cloud console. No script created it.
-
+## Data Store, Created In The Cloud Console
 1. Open **Cloud Storage**, then **Buckets**, and create a bucket in the workshop project.
 2. Upload `harbor_bites_employee_handbook.txt`.
 3. Open **AI Applications**, then **Data Stores**, and click **Create data store**.
@@ -34,32 +50,62 @@ Set `GOOGLE_CLOUD_LOCATION=global` in `.env`. Vertex AI Search only grounds the 
 
 Copy the data store ID from the details page into `.env`:
 
-```bash
-cp challenge-2-rag-and-search/.env.example challenge-2-rag-and-search/.env
-```
-
 ```text
 DISCOVERY_ENGINE_DATASTORE_FULL_NAME=projects/PROJECT_ID/locations/global/collections/default_collection/dataStores/DATA_STORE_ID
 ```
 
-`handbook_specialist` calls `search_employee_handbook`, a Discovery Engine function, with that data store name. The built-in Vertex AI Search tool makes `gemini-3.8-flash` emit a tool call that nothing answers, and the specialist repeats that call. The root agent calls the specialist with `AgentTool`. The account running the agent needs **Discovery Engine Viewer** on the project. Install `google-cloud-discoveryengine` before starting the playground. If Documents stays empty after import, give **Storage Object Viewer** on the bucket to `service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com` and import the file again from the data store page.
+`handbook_specialist` calls `search_employee_handbook`, a Discovery Engine function, with that data store name. The built-in Vertex AI Search tool makes `gemini-3.8-flash` emit a tool call that nothing answers, and the specialist repeats that call. The root agent calls the specialist with `AgentTool`.
 
-## Run
+## Prerequisites
+- Python 3.10+
+- A virtual environment
+- `google-adk` and `google-cloud-discoveryengine` installed
+- Application Default Credentials for Vertex AI
+- A Discovery Engine data store in `global`, populated from the handbook text file
+- **Discovery Engine Viewer** on the project for the account running the agent
 
+## Environment Variables
+```bash
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GOOGLE_CLOUD_PROJECT=your-project
+GOOGLE_CLOUD_LOCATION=global
+DISCOVERY_ENGINE_DATASTORE_FULL_NAME=projects/PROJECT_ID/locations/global/collections/default_collection/dataStores/DATA_STORE_ID
+```
+
+Replace `your-project` with the real project ID.
+
+## Setup
 From the workshop repository root:
 
 ```bash
-adk web challenge-2-rag-and-search
+cd ./challenge-2-rag-and-search
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+cp .env.example .env
+```
+
+Edit `.env` with the project ID and the full data store name.
+
+## Running Tests
+From the workshop repository root. The tests check the handbook text and that the root delegates to both specialists. They do not call Discovery Engine or Google Search.
+
+```bash
+cd ./challenge-2-rag-and-search
+source .venv/bin/activate
+PYTHONPATH=. python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+## Playground
+From the workshop repository root:
+
+```bash
+cd ./challenge-2-rag-and-search
+source .venv/bin/activate
+adk web .
 ```
 
 Open `harbor_helpdesk`.
 
-## Tests
-
-From the workshop repository root:
-
-```bash
-PYTHONPATH=challenge-2-rag-and-search python -m unittest discover -s challenge-2-rag-and-search/tests -p "test_*.py" -v
-```
-
-The tests check the handbook text and that the root delegates to both specialists. They do not call Discovery Engine or Google Search.
+## Notes
+- If Documents stays empty after import, give **Storage Object Viewer** on the bucket to `service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com` and import the file again from the data store page.

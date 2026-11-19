@@ -23,9 +23,11 @@ Graph (the back-edge is the ADK 2 form of LoopAgent(max_iterations=3)):
 This is a design-review demo. It does not draw diagrams, write ADRs, or
 generate code.
 
-Run from the repo root:
+Run from the workshop repository root:
 
-    adk web challenge-1-multi-agent-workflow
+    cd ./challenge-1-multi-agent-workflow
+    source .venv/bin/activate
+    adk web .
 """
 
 from __future__ import annotations
