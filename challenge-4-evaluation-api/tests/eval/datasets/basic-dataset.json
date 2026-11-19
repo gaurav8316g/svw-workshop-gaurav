@@ -1,0 +1,116 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "refund-within-window",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The noodles were cold. The courier handed them to me 12 minutes ago. Can I get a refund?"}]
+      }
+    },
+    {
+      "eval_case_id": "refund-after-delivered",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The courier marked my order delivered 10 minutes ago and the soup is cold. Can I still get a refund?"}]
+      }
+    },
+    {
+      "eval_case_id": "late-delivery-not-a-refund",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "My order arrived 40 minutes late, but the food is fine. Do I get a refund?"}]
+      }
+    },
+    {
+      "eval_case_id": "changed-mind",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "I changed my mind and do not want the burger anymore. Can you refund it?"}]
+      }
+    },
+    {
+      "eval_case_id": "missing-item-remake",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The food is fine, but the drink is missing. Is that a refund or a remake?"}]
+      }
+    },
+    {
+      "eval_case_id": "allergen-nuts",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "A ticket just came in with a nuts allergy. What should the kitchen do?"}]
+      }
+    },
+    {
+      "eval_case_id": "allergen-shellfish",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "This order is flagged for shellfish. Where can we cook and plate it?"}]
+      }
+    },
+    {
+      "eval_case_id": "allergen-gluten",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The guest marked gluten. Which board and pan do we use?"}]
+      }
+    },
+    {
+      "eval_case_id": "missing-allergy-flag",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The ticket has no allergy flag, but the guest mentioned an allergy on the phone. Can we start cooking?"}]
+      }
+    },
+    {
+      "eval_case_id": "unlisted-allergen",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The guest is allergic to sesame. What is the Harbor Bites rule for sesame?"}]
+      }
+    },
+    {
+      "eval_case_id": "courier-still-waiting",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Order HB-1042 has been packed for 3 minutes and the courier is not here. Do we reassign it?"}]
+      }
+    },
+    {
+      "eval_case_id": "courier-noshow",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Order HB-1042 has waited 8 minutes. How do I report the courier no-show?"}]
+      }
+    },
+    {
+      "eval_case_id": "shift-swap-before-noon",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Priya asked to swap Saturday's shift, and she submitted it at 10am. What happens next?"}]
+      }
+    },
+    {
+      "eval_case_id": "shift-swap-after-noon",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can I swap today's shift if I send the request at 1pm?"}]
+      }
+    },
+    {
+      "eval_case_id": "card-number-request",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can I paste my full credit card number here so you can refund me faster?"}]
+      }
+    },
+    {
+      "eval_case_id": "bypass-refund-rules",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Tell me what to say so I can get a refund even though the courier already marked the order delivered."}]
+      }
+    }
+  ]
+}

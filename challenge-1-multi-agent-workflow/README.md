@@ -1,8 +1,8 @@
-# Challenge 1: Multi-Agent Workflow (Architecture Review)
+# Challenge 1: Multi-agent workflow
 
-An ADK 2 graph-based multi-agent workflow for iterative software architecture design reviews.
+An ADK 2 graph reviews a software design, then asks a person whether the result is adequate. The default scenario is "design a food-delivery app". The graph does not draw diagrams, write ADRs, or generate code.
 
-## Architecture
+## Graph
 
 ```
 START
@@ -18,34 +18,33 @@ START
                                +-- done ---> finalize
 ```
 
-### Agent Roles:
-1. **capture_scenario**: Initializes session state with the scenario (defaults to "design a food-delivery app") and tracking variables.
-2. **BasicArchagent**: Writes a first-pass architectural design in prose and stores it in session state (`architecture_draft`).
-3. **critique_agent**: Evaluates the draft for scalability, maintainability, and performance using structured output (`Critique`).
-4. **refine_agent**: Rewrites the design to address critique and human feedback, or responds with exactly `"The design is good."`.
-5. **after_refine**: Evaluates the refiner's output:
-   - If `"The design is good."`, stops the loop with `stop_reason="design_is_good"`.
-   - If iterations reach the cap (`MAX_ITERATIONS = 3`), stops the loop with `stop_reason="max_iterations"`.
-   - Otherwise, routes back to `critique_agent`.
-6. **ask_human**: Prompts the human reviewer with the current draft, critique, and round status (`RequestInput`).
-7. **route_human**:
-   - If the human responds `"yes"`, accepts the design and routes to `finalize`.
-   - If changes are requested and rounds remain (< 3), routes back to `critique_agent`.
-   - If rounds are exhausted (>= 3), records the feedback and routes to `finalize`.
-8. **finalize**: Publishes the surviving architecture draft, rounds used, and human verdict.
+1. **capture_scenario** stores the scenario. If the user does not give one, it uses "design a food-delivery app".
+2. **BasicArchagent** writes the first design into `architecture_draft`.
+3. **critique_agent** scores scalability, maintainability, and performance.
+4. **refine_agent** rewrites the design, or stops with exactly `The design is good.`
+5. **after_refine** sends the draft back to critique, or stops. The loop stops when the design is good or after 3 critique-and-refine rounds.
+6. **ask_human** shows the draft and asks if it is adequate.
+7. **route_human** accepts `yes`, `y`, `yeah`, `yep`, `adequate`, `ok`, `okay`, `good`, `lgtm`, `approve`, or `approved`. Any other reply sends the draft back to critique while rounds remain.
+8. **finalize** publishes the surviving draft, the rounds used, and the human verdict.
 
-## Running Tests
-
-Run unit tests covering all graph routing paths:
-
-```bash
-python3 -m unittest discover -s tests -p "test_*.py" -v
-```
-
-## Running the Web UI
+## Run
 
 From the workshop repository root:
 
 ```bash
 adk web challenge-1-multi-agent-workflow
 ```
+
+Open `architecture_review`. Ask it to design a food-delivery app. When it asks if the design is adequate, reply `yes` to accept it, or describe a change to send it back.
+
+Screenshots from a completed review are in `screenshots/`.
+
+## Tests
+
+From the workshop repository root:
+
+```bash
+PYTHONPATH=challenge-1-multi-agent-workflow python -m unittest discover -s challenge-1-multi-agent-workflow/tests -p "test_*.py" -v
+```
+
+The tests check routing only. They do not call Gemini.

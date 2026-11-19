@@ -1,0 +1,31 @@
+# Harbor Bites employee handbook
+
+Harbor Bites is a food-delivery kitchen. These rules are for staff only.
+
+## Returns and refunds
+
+Refund food-quality problems reported within 30 minutes of handoff. That is the refund window.
+
+Once the courier marks the order delivered, the refund window is closed. Do not issue a refund after that mark, even if the guest writes in later about food quality.
+
+Late delivery, a changed mind, and a missing item that is not a food-quality problem are not refunds. Offer a remake only when a manager approves it.
+
+## Allergens
+
+Harbor Bites tracks three allergens: nuts, shellfish, and gluten.
+
+- Nuts: stop the ticket. Remake the order away from shared equipment and flag the bag in red.
+- Shellfish: cook only at the shellfish station. Do not plate this order on the grill line.
+- Gluten: use the gluten-free prep board and a clean pan.
+
+If a ticket is missing an allergy flag, do not start cooking. Ask the guest which of nuts, shellfish, or gluten applies, write the flag on the ticket, then cook.
+
+## Couriers
+
+Hold a packed bag for 5 minutes after it is ready. If the assigned courier has not arrived when those 5 minutes end, reassign the order to the next courier.
+
+To report a no-show, record the order id, the courier name, and the time the 5-minute wait ended. Log that note before the new courier picks up the bag.
+
+## Shifts
+
+A shift swap needs manager approval, and the request must be submitted before noon on the shift date. A request that arrives at noon or later is rejected. Do not trade the shift until the manager approves it.

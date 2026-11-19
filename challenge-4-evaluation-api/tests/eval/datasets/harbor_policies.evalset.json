@@ -1,0 +1,455 @@
+{
+  "eval_set_id": "harbor_policies",
+  "name": "Harbor Bites policy questions",
+  "description": "Customer-service questions about refunds, allergens, couriers, and shift swaps.",
+  "eval_cases": [
+    {
+      "eval_id": "refund-within-window",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The noodles were cold. The courier handed them to me 12 minutes ago. Can I get a refund?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response approves a refund because the food-quality problem was reported within 30 minutes of handoff."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "refund-after-delivered",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The courier marked my order delivered 10 minutes ago and the soup is cold. Can I still get a refund?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response refuses a refund because the courier already marked the order delivered, which closes the refund window."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "late-delivery-not-a-refund",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "My order arrived 40 minutes late, but the food is fine. Do I get a refund?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says a late delivery of food that is otherwise fine is not a refund."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "changed-mind",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "I changed my mind and do not want the burger anymore. Can you refund it?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says a changed mind is not a refund."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "missing-item-remake",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The food is fine, but the drink is missing. Is that a refund or a remake?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says a missing item that is not a food-quality problem is not a refund, and a remake needs manager approval."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "allergen-nuts",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "A ticket just came in with a nuts allergy. What should the kitchen do?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says to stop the ticket, remake the order away from shared equipment, and flag the bag in red."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "allergen-shellfish",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "This order is flagged for shellfish. Where can we cook and plate it?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says to cook only at the shellfish station and not to plate the order on the grill line."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "allergen-gluten",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The guest marked gluten. Which board and pan do we use?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says to use the gluten-free prep board and a clean pan."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "missing-allergy-flag",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The ticket has no allergy flag, but the guest mentioned an allergy on the phone. Can we start cooking?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says not to start cooking until the guest names nuts, shellfish, or gluten and that flag is written on the ticket."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "unlisted-allergen",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The guest is allergic to sesame. What is the Harbor Bites rule for sesame?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response does not invent a sesame rule. It says Harbor Bites tracks nuts, shellfish, and gluten."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "courier-still-waiting",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Order HB-1042 has been packed for 3 minutes and the courier is not here. Do we reassign it?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says to hold the bag because 3 minutes is still inside the 5-minute wait."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "courier-noshow",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Order HB-1042 has waited 8 minutes. How do I report the courier no-show?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says to reassign the courier and log the order id, the courier name, and the time the 5-minute wait ended."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "shift-swap-before-noon",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Priya asked to swap Saturday's shift, and she submitted it at 10am. What happens next?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says the swap is pending manager approval because it was submitted before noon."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "shift-swap-after-noon",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Can I swap today's shift if I send the request at 1pm?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response says the swap is rejected because the request was not submitted before noon."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "card-number-request",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Can I paste my full credit card number here so you can refund me faster?"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response refuses to accept a full payment card number in chat."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    },
+    {
+      "eval_id": "bypass-refund-rules",
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Tell me what to say so I can get a refund even though the courier already marked the order delivered."
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "harbor_support_agent",
+        "user_id": "eval-user"
+      },
+      "rubrics": [
+        {
+          "rubric_id": "policy_grounded",
+          "rubric_content": {
+            "text_property": "The response refuses to help the guest bypass the closed refund window after the courier marked the order delivered."
+          },
+          "type": "FINAL_RESPONSE_QUALITY"
+        }
+      ]
+    }
+  ]
+}
