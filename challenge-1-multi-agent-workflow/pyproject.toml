@@ -1,0 +1,19 @@
+[project]
+name = "challenge-1-multi-agent-workflow"
+version = "0.1.0"
+description = "Iterative architecture review multi-agent workflow using ADK2"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-adk>=2.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
