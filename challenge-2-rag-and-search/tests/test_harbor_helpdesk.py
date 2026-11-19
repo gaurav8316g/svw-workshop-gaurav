@@ -29,21 +29,31 @@ class HandbookFileTest(unittest.TestCase):
 
 class HelpdeskRoutingTest(unittest.TestCase):
     def test_root_delegates_to_handbook_and_web_specialists(self):
+        from google.adk.tools.agent_tool import AgentTool
+        from google.adk.tools.discovery_engine_search_tool import (
+            DiscoveryEngineSearchTool,
+        )
         from google.adk.tools.google_search_tool import GoogleSearchTool
-        from google.adk.tools.vertex_ai_search_tool import VertexAiSearchTool
+        from harbor_helpdesk.agent import DISCOVERY_ENGINE_DATASTORE_FULL_NAME
         from harbor_helpdesk.agent import handbook_specialist
         from harbor_helpdesk.agent import root_agent
         from harbor_helpdesk.agent import web_specialist
 
         self.assertEqual(root_agent.name, "harbor_helpdesk")
         self.assertEqual(
-            [agent.name for agent in root_agent.sub_agents],
+            [tool.name for tool in root_agent.tools],
             ["handbook_specialist", "web_specialist"],
         )
-        self.assertEqual(handbook_specialist.mode, "single_turn")
-        self.assertEqual(web_specialist.mode, "single_turn")
-        self.assertIsInstance(
-            handbook_specialist.tools[0], VertexAiSearchTool
+        self.assertTrue(
+            all(isinstance(tool, AgentTool) for tool in root_agent.tools)
+        )
+        handbook_tool = handbook_specialist.tools[0]
+        self.assertIsInstance(handbook_tool, DiscoveryEngineSearchTool)
+        self.assertEqual(handbook_tool.name, "search_employee_handbook")
+        self.assertTrue(
+            handbook_tool._serving_config.startswith(
+                DISCOVERY_ENGINE_DATASTORE_FULL_NAME
+            )
         )
         self.assertIsInstance(web_specialist.tools[0], GoogleSearchTool)
         delegated = {tool.name for tool in root_agent.tools}

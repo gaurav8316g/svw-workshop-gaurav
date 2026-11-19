@@ -30,7 +30,7 @@ The data store was created in the Google Cloud console. No script created it.
 6. Set the data store location to **global**. Name it `harbor-bites-handbook`.
 7. Click **Create**. On the data store page, wait on **Activity** until the status is **Import completed**, then confirm the file is listed under **Documents**.
 
-The Gemini model still uses `us-central1`. The data store location in the resource name is `global`.
+Set `GOOGLE_CLOUD_LOCATION=global` in `.env`. Vertex AI Search only grounds the model when the Gemini call uses the same location as the data store.
 
 Copy the data store ID from the details page into `.env`:
 
@@ -39,10 +39,10 @@ cp challenge-2-rag-and-search/.env.example challenge-2-rag-and-search/.env
 ```
 
 ```text
-DISCOVERY_ENGINE_DATASTORE=projects/PROJECT_ID/locations/global/collections/default_collection/dataStores/DATA_STORE_ID
+DISCOVERY_ENGINE_DATASTORE_FULL_NAME=projects/PROJECT_ID/locations/global/collections/default_collection/dataStores/DATA_STORE_ID
 ```
 
-`handbook_specialist` reads that variable and searches the data store with Vertex AI Search. If Documents stays empty after import, give **Storage Object Viewer** on the bucket to `service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com` and import the file again from the data store page.
+`handbook_specialist` calls `search_employee_handbook`, a Discovery Engine function, with that data store name. The built-in Vertex AI Search tool makes `gemini-3.8-flash` emit a tool call that nothing answers, and the specialist repeats that call. The root agent calls the specialist with `AgentTool`. The account running the agent needs **Discovery Engine Viewer** on the project. Install `google-cloud-discoveryengine` before starting the playground. If Documents stays empty after import, give **Storage Object Viewer** on the bucket to `service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com` and import the file again from the data store page.
 
 ## Run
 

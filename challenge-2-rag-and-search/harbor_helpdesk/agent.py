@@ -1,11 +1,15 @@
 """Harbor Bites staff helpdesk.
 
-The root agent routes each question to one single-turn specialist:
+The root agent routes each question to one specialist tool:
 
-- handbook_specialist searches the Discovery Engine data store created in
-  the Google Cloud console from the employee handbook.
+- handbook_specialist calls search_employee_handbook, which queries the
+  Discovery Engine data store and returns the passages.
 - web_specialist uses Google Search for live weather, road closures, news,
   and anything the handbook does not cover.
+
+The data store is in global, so this module calls Gemini in global too.
+Vertex AI Search grounding does not run when the model location is a region
+such as us-central1.
 
 Run from the workshop repository root:
 
@@ -18,13 +22,39 @@ import logging
 import os
 
 from google.adk.agents.llm_agent import Agent
+from google.adk.tools.agent_tool import AgentTool
+from google.adk.tools.discovery_engine_search_tool import (
+    DiscoveryEngineSearchTool,
+)
 from google.adk.tools.google_search_tool import google_search
-from google.adk.tools.vertex_ai_search_tool import VertexAiSearchTool
 
 MODEL_NAME = "gemini-3.8-flash"
-DISCOVERY_ENGINE_DATASTORE = os.getenv("DISCOVERY_ENGINE_DATASTORE", "")
 
 logger = logging.getLogger("harbor_helpdesk")
+
+try:
+    import google.auth
+
+    _, _adc_project = google.auth.default()
+except Exception:
+    _adc_project = ""
+
+if _adc_project:
+    os.environ.setdefault("GOOGLE_CLOUD_PROJECT", _adc_project)
+os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+
+_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-project")
+DISCOVERY_ENGINE_DATASTORE_FULL_NAME = os.getenv(
+    "DISCOVERY_ENGINE_DATASTORE_FULL_NAME",
+    os.getenv(
+        "DISCOVERY_ENGINE_DATASTORE",
+        (
+            f"projects/{_PROJECT}/locations/global/collections/"
+            "default_collection/dataStores/harbor-bites-handbook"
+        ),
+    ),
+)
 
 HANDBOOK_TOPICS = (
     "refunds and the 30-minute food-quality window",
@@ -33,30 +63,19 @@ HANDBOOK_TOPICS = (
     "shift swaps and the noon approval cutoff",
 )
 
-
-def _handbook_tool() -> VertexAiSearchTool:
-    """Search the Discovery Engine data store created in the Cloud console."""
-    datastore = DISCOVERY_ENGINE_DATASTORE
-    if not datastore:
-        logger.warning(
-            "DISCOVERY_ENGINE_DATASTORE is not set. handbook_specialist "
-            "cannot search the handbook until that data store resource "
-            "name is configured."
-        )
-        datastore = (
-            "projects/unset/locations/global/collections/"
-            "default_collection/dataStores/harbor-bites-handbook"
-        )
-    return VertexAiSearchTool(
-        data_store_id=datastore,
-        max_results=5,
+if not os.getenv("DISCOVERY_ENGINE_DATASTORE_FULL_NAME") and not os.getenv(
+    "DISCOVERY_ENGINE_DATASTORE"
+):
+    logger.warning(
+        "DISCOVERY_ENGINE_DATASTORE_FULL_NAME is not set. "
+        "handbook_specialist is using %s.",
+        DISCOVERY_ENGINE_DATASTORE_FULL_NAME,
     )
 
 
 handbook_specialist = Agent(
     name="handbook_specialist",
     model=MODEL_NAME,
-    mode="single_turn",
     description=(
         "Answers Harbor Bites staff questions from the employee handbook: "
         + "; ".join(HANDBOOK_TOPICS)
@@ -64,12 +83,13 @@ handbook_specialist = Agent(
         "weather, road closures, or news."
     ),
     instruction="""
-You answer Harbor Bites staff questions from the employee handbook only.
+You answer Harbor Bites staff questions from the private handbook datastore.
 
-Use the handbook data store before you answer. Use the retrieved text as
-the policy. Do not add rules that are not in the retrieved text.
+Call search_employee_handbook once, then answer from its passages.
+Do not call it again for the same question.
+Do not add rules that are not in those passages.
 
-If the retrieval result does not cover the question, reply with exactly:
+If the datastore does not contain the answer, reply with exactly:
 The handbook does not cover this.
 
 Covered topics:
@@ -78,13 +98,22 @@ Covered topics:
 - courier waits, reassignment, and no-shows
 - shift swaps and the noon approval cutoff
 """,
-    tools=[_handbook_tool()],
+    tools=[
+        DiscoveryEngineSearchTool(
+            data_store_id=DISCOVERY_ENGINE_DATASTORE_FULL_NAME,
+            max_results=5,
+            name="search_employee_handbook",
+            description=(
+                "Search the Harbor Bites employee handbook for refund, "
+                "allergen, courier, and shift-swap rules."
+            ),
+        )
+    ],
 )
 
 web_specialist = Agent(
     name="web_specialist",
     model=MODEL_NAME,
-    mode="single_turn",
     description=(
         "Answers with Google Search when the Harbor Bites handbook does not "
         "apply: live weather, road closures, news, and other public facts. "
@@ -124,6 +153,10 @@ the handbook does not cover.
 
 If handbook_specialist replies "The handbook does not cover this.", call
 web_specialist with the same question and return that answer.
+If unsure, try handbook_specialist first, then web_specialist.
 """,
-    sub_agents=[handbook_specialist, web_specialist],
+    tools=[
+        AgentTool(agent=handbook_specialist),
+        AgentTool(agent=web_specialist),
+    ],
 )
