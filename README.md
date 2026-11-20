@@ -3,19 +3,20 @@
 Harbor Bites is the running example: a food-delivery kitchen. Each challenge is an independent ADK 2 project.
 
 ## Goal
-Show five agent patterns on the same kitchen policies:
+Show five Harbor Bites agent patterns, then the Alaska Department of Snow case study:
 
 - A multi-agent design review with a human decision
 - Handbook search plus Google Search
 - A custom MCP server plus Google's Maps MCP server
 - A policy agent, an evaluation dataset, and a before-and-after prompt comparison
 - A customer-service agent deployed to Agent Platform and Gemini Enterprise
+- An Alaska Department of Snow field-operations system with MCP, policy search, and live conditions
 
 ## Scope For This Lab
 Keep each challenge self-contained and runnable on its own. Open a challenge from this repository root, or `cd` into that challenge folder.
 
 ## Status
-Implemented with five challenges.
+Implemented with six challenges.
 
 | Challenge | Folder | What it shows |
 | --- | --- | --- |
@@ -24,6 +25,7 @@ Implemented with five challenges.
 | 3 | `challenge-3-mcp-integration` | A custom MCP server plus Google's Maps MCP server |
 | 4 | `challenge-4-evaluation-api` | A policy agent, an evaluation dataset, and a before-and-after prompt comparison |
 | 5 | `challenge-5-gemini-enterprise-deployment` | Harbor Bites customer service, deployed to Agent Platform and registered in Gemini Enterprise |
+| 6 | `challenge-6-dept-of-snow` | Alaska Department of Snow dispatch, road status, and public alerts |
 
 ## Shared Setup
 Each challenge that calls Vertex AI uses the same credentials. Copy that challenge's `.env.example` to `.env` and replace `your-project` with the real project ID. Leaving the placeholder makes Vertex return `PERMISSION_DENIED` for `projects/your-project`.
@@ -42,7 +44,7 @@ gcloud auth application-default login
 gcloud services enable aiplatform.googleapis.com --project=YOUR_PROJECT_ID
 ```
 
-Challenge 2 sets `GOOGLE_CLOUD_LOCATION=global` so Gemini uses the same location as the data store.
+Challenge 2 and Challenge 6 set `GOOGLE_CLOUD_LOCATION=global` so Gemini uses the same location as the data store.
 
 ## Run An Agent
 From this repository root, enter the challenge and activate its virtual environment, then start the playground. Create the virtual environment once with the Setup steps in that challenge's README.
@@ -89,6 +91,17 @@ adk web .
 
 Deploy and Gemini Enterprise registration steps are in that challenge's README.
 
+Challenge 6, then open `ads_field_ops`:
+
+```bash
+cd ./challenge-6-dept-of-snow
+source .venv/bin/activate
+adk web .
+```
+
+The storm-procedure data store, Maps key, evaluation, and deployment steps are in that challenge's README.
+
 ## Notes
 - Challenge 2 does not create its data store from a script. The handbook file is uploaded in the Google Cloud console. The steps are in that challenge's README.
 - Kitchen questions in Challenge 3 run without a Maps key. Maps questions need `GOOGLE_MAPS_API_KEY`.
+- Challenge 6 does not create its policy data store from a script. Upload `ads_policies/ads_storm_procedures.txt` in the Google Cloud console. Dispatch and stored road status run without a Maps key.

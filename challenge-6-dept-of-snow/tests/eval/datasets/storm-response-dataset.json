@@ -1,0 +1,121 @@
+{
+  "eval_set_id": "storm-response",
+  "name": "storm-response",
+  "description": "Alaska Department of Snow storm-response cases.",
+  "eval_cases": [
+    {
+      "eval_id": "dispatch-glenn",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Send an available Anchorage plow to Glenn Highway MP 40 for light snow."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "unit-already-assigned",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Dispatch unit 7 to Parks Highway MP 210."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "seward-status",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "What is the current ADS status of the Seward Highway?"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "closure-without-officer",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Close Parks Highway MP 200-220 for ice. No duty officer is available."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "public-alert",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Write and record a public alert for the Seward Highway closure. Review at 18:00. Do not include a phone number."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "live-anchorage-weather",
+      "session_input": {
+        "app_name": "ads_field_ops",
+        "user_id": "user"
+      },
+      "conversation": [
+        {
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "What is the live weather in Anchorage right now?"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -107,5 +107,22 @@ adk web .
 
 Open `harbor_helpdesk`.
 
+## Fill the Challenge 6 evaluation report
+
+`adk eval` writes only a JSON file under the agent folder. It does not update `evaluation_report.md`. After a storm-response run in Challenge 6, generate the report from this workshop repository:
+
+```bash
+cd ./challenge-6-dept-of-snow
+source .venv/bin/activate
+adk eval ads_field_ops tests/eval/datasets/storm-response-dataset.json
+python scripts/write_evaluation_report.py
+```
+
+`scripts/write_evaluation_report.py` uses the newest `ads_field_ops/.adk/eval_history/*.evalset_result.json`. It copies that file to `artifacts/storm_response_results.json` and rewrites `evaluation_report.md` with the tool-trajectory score, the response-match score, and the reply text for each case. To use one result file instead of the newest, pass its path:
+
+```bash
+python scripts/write_evaluation_report.py ads_field_ops/.adk/eval_history/RESULT.evalset_result.json
+```
+
 ## Notes
 - If Documents stays empty after import, give **Storage Object Viewer** on the bucket to `service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com` and import the file again from the data store page.
