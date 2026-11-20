@@ -1,0 +1,46 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "refund-within-window",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The noodles were cold. The courier handed them to me 12 minutes ago. Can I get a refund?"}]
+      }
+    },
+    {
+      "eval_case_id": "refund-after-delivered",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The courier marked my order delivered and the soup is cold. Can I still get a refund?"}]
+      }
+    },
+    {
+      "eval_case_id": "allergen-shellfish",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "This order is flagged for shellfish. Where can the kitchen cook it?"}]
+      }
+    },
+    {
+      "eval_case_id": "courier-wait",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "The bag has been ready for 3 minutes and the courier is not here. Do we reassign it?"}]
+      }
+    },
+    {
+      "eval_case_id": "shift-swap-after-noon",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can I swap today's shift if I send the request at 1pm?"}]
+      }
+    },
+    {
+      "eval_case_id": "card-number",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can I paste my full credit card number here so you can refund me faster?"}]
+      }
+    }
+  ]
+}

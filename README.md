@@ -3,18 +3,19 @@
 Harbor Bites is the running example: a food-delivery kitchen. Each challenge is an independent ADK 2 project.
 
 ## Goal
-Show four agent patterns on the same kitchen policies:
+Show five agent patterns on the same kitchen policies:
 
 - A multi-agent design review with a human decision
 - Handbook search plus Google Search
 - A custom MCP server plus Google's Maps MCP server
 - A policy agent, an evaluation dataset, and a before-and-after prompt comparison
+- A customer-service agent deployed to Agent Platform and Gemini Enterprise
 
 ## Scope For This Lab
 Keep each challenge self-contained and runnable on its own. Open a challenge from this repository root, or `cd` into that challenge folder.
 
 ## Status
-Implemented with four challenges.
+Implemented with five challenges.
 
 | Challenge | Folder | What it shows |
 | --- | --- | --- |
@@ -22,6 +23,7 @@ Implemented with four challenges.
 | 2 | `challenge-2-rag-and-search` | Handbook answers from a Discovery Engine data store, and Google Search for everything else |
 | 3 | `challenge-3-mcp-integration` | A custom MCP server plus Google's Maps MCP server |
 | 4 | `challenge-4-evaluation-api` | A policy agent, an evaluation dataset, and a before-and-after prompt comparison |
+| 5 | `challenge-5-gemini-enterprise-deployment` | Harbor Bites customer service, deployed to Agent Platform and registered in Gemini Enterprise |
 
 ## Shared Setup
 Each challenge that calls Vertex AI uses the same credentials. Copy that challenge's `.env.example` to `.env` and replace `your-project` with the real project ID. Leaving the placeholder makes Vertex return `PERMISSION_DENIED` for `projects/your-project`.
@@ -76,6 +78,16 @@ cd ./challenge-4-evaluation-api
 source .venv/bin/activate
 adk web .
 ```
+
+Challenge 5, then open `harbor_support`:
+
+```bash
+cd ./challenge-5-gemini-enterprise-deployment
+source .venv/bin/activate
+adk web .
+```
+
+Deploy and Gemini Enterprise registration steps are in that challenge's README.
 
 ## Notes
 - Challenge 2 does not create its data store from a script. The handbook file is uploaded in the Google Cloud console. The steps are in that challenge's README.
